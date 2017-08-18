@@ -67,8 +67,8 @@ contract Crowdsale {
 }
 ```
 
-```
 Set up constructor
+```
 function Crowdsale () {
     // Set wallet that funds will be transferred to
     projectWallet = 0xa395650f5e23cb33fad82a0d1924747183b126a0
@@ -136,5 +136,38 @@ function () payable {
   // msg.sender is the address of the account calling this contract
   balances[msg.sender] += msg.value;
   transferredTotal = += msg.value;
+}
+```
+Create method for transfer of funds
+```
+// Transfer funds to project wallet
+function transferToProjectWallet () {
+  // Check if minimum goal reached
+  if (!isMinimumGoalReached()) throw;
+  // Check if balance is zero and throw
+  // this is global variable that accesses contract balance
+  if (this.balance == 0) throw;
+
+  // If above checks are passed transfer ether to project wallet
+  if(!projectWallet.send(this.balance)) throw;
+}
+```
+Write refund function if minimum amount not reached
+```
+// Refund if minimum not reached
+function refund () {
+  //Check if crowdsale has ended
+  if (!hasCrowdsaleEnded()) throw;
+  //Check if min goal has been reached
+  if (isMinimumGoalReached()) throw;
+  //check if sender has balance
+  var amount = balance[msg.sender];
+  if (amount == 0) throw;
+
+  //reset balance
+  balances[msg.sender] = 0;
+
+  // Refund balance
+  if (!msg.sender.send(amount)) throw;
 }
 ```

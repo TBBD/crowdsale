@@ -95,8 +95,34 @@ contract Crowdsale {
     transferredTotal = += msg.value;
   }
 
-  // Transfer funds to project address
+  // Transfer funds to project wallet
+  function transferToProjectWallet () {
+    // Check if minimum goal reached
+    if (!isMinimumGoalReached()) throw;
+    // Check if balance is zero and throw
+    // this is global variable that accesses contract balance
+    if (this.balance == 0) throw;
+
+    // If above checks are passed transfer ether to project wallet
+    if(!projectWallet.send(this.balance)) throw;
+  }
 
   // Refund if minimum not reached
+  function refund () {
+    //Check if crowdsale has ended
+    if (!hasCrowdsaleEnded()) throw;
+    //Check if min goal has been reached
+    if (isMinimumGoalReached()) throw;
+    //check if sender has balance
+    var amount = balance[msg.sender];
+    if (amount == 0) throw;
+
+    //reset balance
+    balances[msg.sender] = 0;
+
+    // Refund balance
+    if (!msg.sender.send(amount)) throw;
+  }
+
 
 }
