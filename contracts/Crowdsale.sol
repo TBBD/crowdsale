@@ -16,12 +16,12 @@ contract Crowdsale {
 
   // Address that received funds will be transferred to.
   // This address should be controlled by the creator of the contract
-  address public constant projectWallet;
+  address public projectWallet;
 
   // Set the min/max amount of Ether for the crowdsale
   // ether is a global that sets the correct amount in wei
-  uint public constant maxGoalAmount = 1 ether;
-  uint public constant minGoalAmount = 5 ether;
+  uint public constant maxGoalAmount = 5 ether;
+  uint public constant minGoalAmount = 1 ether;
 
   // Set variables for when contract will open and close for donation
   // We will be using block number here but block time can be used as well
@@ -34,12 +34,13 @@ contract Crowdsale {
     // constructor
 
     // Set wallet that funds will be transfered to
+    // setting to local variable to avoid compiler warning
     projectWallet = 0xa395650f5e23cb33fad82a0d1924747183b126a0;
 
     // Set blocks that contract will open and close
     // Need to check current block and for which blockchain
-    startBlock = 0;
-    endBlock = 0;
+    startBlock = 737600;
+    endBlock = 737700;
 
   }
 
@@ -92,7 +93,7 @@ contract Crowdsale {
     // If ether sent passes above checks, add value to balance and transferred total
     // msg.sender is the address of the account calling this contract
     balances[msg.sender] += msg.value;
-    transferredTotal = += msg.value;
+    transferredTotal += msg.value;
   }
 
   // Transfer funds to project wallet
@@ -114,7 +115,7 @@ contract Crowdsale {
     //Check if min goal has been reached
     if (isMinimumGoalReached()) throw;
     //check if sender has balance
-    var amount = balance[msg.sender];
+    var amount = balances[msg.sender];
     if (amount == 0) throw;
 
     //reset balance

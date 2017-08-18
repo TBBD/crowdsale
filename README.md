@@ -57,8 +57,8 @@ contract Crowdsale {
 
   // Set the min/max amount of Ether for the crowdsale
   // ether keyword sets the correct amount in wei
-  uint public constant maxGoalAmount = 1 ether;
-  uint public constant minGoalAmount = 5 ether;
+  uint public constant maxGoalAmount = 5 ether;
+  uint public constant minGoalAmount = 1 ether;
 
   // Set variables for when contract will open and close for donation
   // Will specify block number in constructor
@@ -75,8 +75,8 @@ function Crowdsale () {
 
     // Set blocks that contract will open and close
     // Need to check current block and for which blockchain
-    startBlock = 0;
-    endBlock = 0;
+    startBlock = 737600;
+    endBlock = 737700;
 }
 ```
 
@@ -171,3 +171,23 @@ function refund () {
   if (!msg.sender.send(amount)) throw;
 }
 ```
+
+Try to send ether before and after contract opens. Open geth ipc console.
+```
+sender = eth.accounts[0]
+receiver = "<contract address>"
+amount = web3.toWei(1, "ether")
+personal.unlockAccount(sender)
+eth.sendTransaction({from: sender, to: receiver, value: amount})
+```
+
+Once crowdsale contract has opened and reached the minimum amount, transfer funds to project wallet using geth console. Get contract abi from  https://ethereum.github.io/browser-solidity/.
+
+```
+abi = <interface JSON>
+contract = eth.contract(abi)
+```
+
+Copy Crowdsale contract address from migration `instance = contract.at("address")`
+Unlock account again - `personal.unlockAccount(sender)`
+Call transfer function on instance `instance.transferToProjectWallet({from: sender})`
