@@ -4,7 +4,7 @@
 
 Very simple crowdsale contract that receives Ether and owner can send funds to selected wallet when minimum goal is reached. Based off of Mysterium's presale contract which can be seen at https://etherscan.io/address/0x4f529990b7f3d1fb4152736155e431c96fd86294#code.
 
-You can see the video of me going through the contract on our Youtube channel - https://youtu.be/UPmHjUTkxqs
+You can see a video of the contract being coded up on our Youtube channel - https://youtu.be/UPmHjUTkxqs
 
 Some of the setup for this will be skipped, please see the Hello World contract steps https://github.com/TBBD/hello-world and video at https://www.youtube.com/watch?v=nqw4FeYQBxc to catch up.
 
