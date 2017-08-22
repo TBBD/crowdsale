@@ -4,6 +4,8 @@
 
 Very simple crowdsale contract that receives Ether and owner can send funds to selected wallet when minimum goal is reached. Based off of Mysterium's presale contract which can be seen at https://etherscan.io/address/0x4f529990b7f3d1fb4152736155e431c96fd86294#code.
 
+You can see the video of me going through the contract on our Youtube channel - https://youtu.be/UPmHjUTkxqs
+
 Some of the setup for this will be skipped, please see the Hello World contract steps https://github.com/TBBD/hello-world and video at https://www.youtube.com/watch?v=nqw4FeYQBxc to catch up.
 
 ## Skeleton of Crowdsale contract
@@ -196,7 +198,7 @@ function refund () {
   if (isMinimumGoalReached()) throw;
 
   //check if sender has balance
-  
+
   var amount = balance[msg.sender];
   if (amount == 0) throw;
 
@@ -222,8 +224,9 @@ Once crowdsale contract has opened and reached the minimum amount, transfer fund
 ```
 abi = <interface JSON>
 contract = eth.contract(abi)
+instance = contract.at("address")
+personal.unlockAccount(sender)
+instance.transferToProjectWallet({from: sender})
 ```
 
-Copy Crowdsale contract address from migration `instance = contract.at("address")`
-Unlock account again - `personal.unlockAccount(sender)`
-Call transfer function on instance `instance.transferToProjectWallet({from: sender})`
+Transfer should go through. Please reach out if you have any questions.

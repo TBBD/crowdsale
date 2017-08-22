@@ -20,8 +20,8 @@ contract Crowdsale {
 
   // Set the min/max amount of Ether for the crowdsale
   // ether is a global that sets the correct amount in wei
-  uint public constant maxGoalAmount = 5 ether;
-  uint public constant minGoalAmount = 1 ether;
+  uint public constant maxGoalAmount = 1 ether;
+  uint public constant minGoalAmount = 5 ether;
 
   // Set variables for when contract will open and close for donation
   // We will be using block number here but block time can be used as well
@@ -39,8 +39,8 @@ contract Crowdsale {
 
     // Set blocks that contract will open and close
     // Need to check current block and for which blockchain
-    startBlock = 737600;
-    endBlock = 737700;
+    startBlock = 0;
+    endBlock = 0;
 
   }
 
