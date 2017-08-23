@@ -30,18 +30,16 @@ contract Crowdsale {
   uint public endBlock;
 
 
-  function Crowdsale() {
+  function Crowdsale(address wallet, uint startingBlock, uint endingBlock) {
     // constructor
 
     // Set wallet that funds will be transfered to
-    // setting to local variable to avoid compiler warning
-    projectWallet = 0xa395650f5e23cb33fad82a0d1924747183b126a0;
+    projectWallet = wallet;
 
     // Set blocks that contract will open and close
     // Need to check current block and for which blockchain
-    startBlock = 0;
-    endBlock = 0;
-
+    startBlock = startingBlock;
+    endBlock = endingBlock;
   }
 
   // Check if crowdsale has started
@@ -78,17 +76,17 @@ contract Crowdsale {
     // Check and throw if crowdsale has not started
     // throw errors out contract and returns ether sent
     // Network still uses gas
-    if (!hasCrowdsaleStarted()) throw;
+    if (!hasCrowdsaleStarted()) revert();
 
     //Check and throw if crowdsale has ended
-    if (hasCrowdsaleEnded()) throw;
+    if (hasCrowdsaleEnded()) revert();
 
     // Check if value sent is 0
     // msg is a global variables
-    if (msg.value == 0) throw;
+    if (msg.value == 0) revert();
 
     // Check if max goal amount has been reached
-    if (isMaximumGoalReached()) throw;
+    if (isMaximumGoalReached()) revert();
 
     // If ether sent passes above checks, add value to balance and transferred total
     // msg.sender is the address of the account calling this contract
@@ -99,30 +97,30 @@ contract Crowdsale {
   // Transfer funds to project wallet
   function transferToProjectWallet () {
     // Check if minimum goal reached
-    if (!isMinimumGoalReached()) throw;
+    if (!isMinimumGoalReached()) revert();
     // Check if balance is zero and throw
     // this is global variable that accesses contract balance
-    if (this.balance == 0) throw;
+    if (this.balance == 0) revert();
 
     // If above checks are passed transfer ether to project wallet
-    if(!projectWallet.send(this.balance)) throw;
+    if(!projectWallet.send(this.balance)) revert();
   }
 
   // Refund if minimum not reached
   function refund () {
     //Check if crowdsale has ended
-    if (!hasCrowdsaleEnded()) throw;
+    if (hasCrowdsaleEnded()) revert();
     //Check if min goal has been reached
-    if (isMinimumGoalReached()) throw;
+    if (!isMinimumGoalReached()) revert();
     //check if sender has balance
-    var amount = balances[msg.sender];
-    if (amount == 0) throw;
+    uint amount = balances[msg.sender];
+    if (amount == 0) revert();
 
     //reset balance
     balances[msg.sender] = 0;
 
     // Refund balance
-    if (!msg.sender.send(amount)) throw;
+    if(!msg.sender.send(amount)) revert();
   }
 
 
